@@ -1,15 +1,24 @@
 % Create pairwise matrix from ratings
 function P = createPairwise(R)
 
-s = size(R,1) * 1000;
+M = 1000000;
+
+full_total = size(R, 1)
+
+pp = M/(full_total*(full_total - 1)/2);
+
+s = size(R,1) * 100;
 P = zeros(s, 3);
-c = 0; 
+c  =0; 
 [Rs,indx] = sort(R(:,1));
 Rs = R(indx,:);
 i = 1;
 
 while (i<=size(Rs,1))
     user_i = Rs(i,1);
+    if (c > s)
+      break
+     end 
     j=i;
     items=[];
     ratings=[];
@@ -47,12 +56,16 @@ while (i<=size(Rs,1))
     for k=1:length(urats),
         for j=xtab(k):(xtab(k+1)-1),
             for l=xtab(k+1):length(items),
+            
+              if (rand < pp)
+              
                 c=c+1;
                 P(c,:) = [user_i, items(l), items(j)];
-                
+               end 
             end
         end
     end
-end
-
+  end
+ c
+save test.mat c ;
 P = P(1:c, :);

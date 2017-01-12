@@ -9,6 +9,8 @@ N = 10; %top N items
 dataFromFile = false;  % read the pairwise data directly from a file 
 calculateDis = false;
 
+
+
 % start evaluation
 fprintf('Computes Recomendations Based on PageRank for Each User \n');
 fprintf('Subset %f, N %i, k %i \n\n', subset, N, k);
@@ -22,7 +24,7 @@ end
 
 if (~dataFromFile)
     % format: user id  item id  rating  timestamp.
-    Y = importdata('ratings.dat');
+    Y = importdata('u1.base');
 
     % remove timestamp
     if (size(Y,2)>3)
@@ -50,6 +52,16 @@ totalRecall = 0.0;
 counter = 0;
 precision=0.0;
 recall = 0.0;
+rowSize = 0;
+colSize = 0;
+ArrayPlot = cell(it,2);
+RecallPlot = cell(it,2);
+prec_count = 0;
+recall_count = 0;
+mean_prec = 0;
+mean_recall = 0;
+
+
 
 % cross validation loop
 for i_it=1:it,
@@ -164,12 +176,16 @@ for i_it=1:it,
                 % calculate precision and recall of lists
                 if length(recommendedItems) ~= 0
                     precision =  length(commonItems) / length(recommendedItems);
+                    
+                    prec_count++;
+                    
                 else
                     precision = 0;
                 end
                 
                 if length(actualItems) ~= 0
                     recall = length(commonItems) / length(actualItems);
+                    recall_count++;
                 else
                     recall = 0;
                 end
@@ -182,6 +198,9 @@ for i_it=1:it,
             end
         end
     end
+    
+    mean_prec = totalPrecision/prec_count
+    mean_recall = totalRecall/recall_count
     
     % ----- Print Results -----
     
@@ -214,14 +233,40 @@ for i_it=1:it,
     if length(testusers) ~= 0
       fprintf('Runtime Per User: %f\n\n',  (tElapsed/i_it)/length(testusers) );
     end
+    
+   S = load('test.mat','c')
+   Comp_num = struct2cell(S)
+  ArrayPlot(i_it,1) = Comp_num;
+  ArrayPlot(i_it,2) = mean_prec;
+  RecallPlot(i_it,1) = Comp_num;
+  RecallPlot(i_it,2) = mean_recall;
+  
+    
     fflush(stdout);
     
       
 end %cross validaton loop
 
+celldisp (ArrayPlot, "ArrayPlot")
+x = ArrayPlot(:,1)
+y = ArrayPlot(:,2)
+a = cell2mat(x)
+b = cell2mat(y)
+
+plot(sort(a),sort(b))
+
+celldisp (RecallPlot, "RecallPlot")
+c = RecallPlot(:,1)
+d = RecallPlot(:,2)
+e = cell2mat(c)
+f = cell2mat(d)
+
+#plot(sort(e),sort(f))
 
 % Compute similarities between users
 function sim=computeSimilarities(user,userSet)
 user_row = userSet(user,:);
 sim = userSet*user_row';
+
+
 
