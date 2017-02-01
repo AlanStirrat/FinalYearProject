@@ -258,8 +258,9 @@ plot(sort(a),sort(b))
 celldisp (RecallPlot, "RecallPlot")
 c = RecallPlot(:,1)
 d = RecallPlot(:,2)
-e = cell2mat(c)
-f = cell2mat(d)
+results = generateData(a,b)
+#a = cell2mat(c)
+#b = cell2mat(d)
 
 #plot(sort(e),sort(f))
 
