@@ -68,4 +68,4 @@ while (i<=size(Rs,1))
   end
  c
 save test.mat c ;
-P = P(1:c, :);
+P = P(1:c, :)

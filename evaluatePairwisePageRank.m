@@ -75,8 +75,9 @@ for i_it=1:it,
         
         if (~dataFromFile) 
           % pairwise
-          P = createPairwise(trainY);
-          testP = createPairwise(testY);
+          #P = createPairwise(trainY);
+          #testP = createPairwise(testY);
+          P = pairwiseAlg(trainY)
         end
 
         

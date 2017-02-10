@@ -6,7 +6,7 @@ indx = unique([P(:,2);P(:,3)]);
 vals = ones(size(P,1),1);
 
 % adding the Loser node
-L = [indx, (pMax+1)*ones(length(indx),1)];
+L = [indx,(pMax+1)*ones(length(indx),1)];
 vals = [vals;ones(length(L),1)];
 
 % adding the Winner node
